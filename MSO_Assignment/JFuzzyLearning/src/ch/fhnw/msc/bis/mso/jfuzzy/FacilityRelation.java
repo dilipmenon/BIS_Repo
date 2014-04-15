@@ -7,6 +7,7 @@ public class FacilityRelation {
 	private FlowData informationFlow;
 	private FlowData materialFlow;
 	private FlowData equipmentFlow;
+	private double referencedAverageClosenessValue;
 	
 	public FacilityRelation(String relationshipIdentifier)
 	{
@@ -24,10 +25,7 @@ public class FacilityRelation {
 		
 	}
 	
-	public double GetReferenceAverageClosenessValue()
-	{
-		return 0.00;
-	}
+	
 
 	public String getRelationshipIdentifier() {
 		return relationshipIdentifier;
@@ -70,6 +68,15 @@ public class FacilityRelation {
 			return this.informationFlow;
 		
 		return this.materialFlow;
+	}
+
+	public double getReferencedAverageClosenessValue() {
+		return referencedAverageClosenessValue;
+	}
+
+	public void setReferencedAverageClosenessValue(
+			double referencedAverageClosenessValue) {
+		this.referencedAverageClosenessValue = referencedAverageClosenessValue;
 	}
 	
 

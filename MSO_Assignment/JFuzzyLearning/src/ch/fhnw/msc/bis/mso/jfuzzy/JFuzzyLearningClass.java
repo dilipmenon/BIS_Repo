@@ -18,6 +18,7 @@ import net.sourceforge.jFuzzyLogic.rule.Variable;
 public class JFuzzyLearningClass {
 	public static void main(String[] args) throws Exception {
 	    Map<String, String> fclFiles = new HashMap<>();
+	    
 	    final String referenceDataFile = "..\\JFuzzyLearning\\InputFiles\\FuzzyGeneticRefData.csv";
 		List<FacilityRelation> facilityRelations = new ArrayList<FacilityRelation>();
 		
@@ -43,7 +44,8 @@ public class JFuzzyLearningClass {
 	    	    fr.getInformationFlow().getReferenceClosenessValue()+ ")");
 	    System.out.println("EQUIPMENT : " + fr.getEquipmentFlow().getCalculatedClosenessValue()+ " ("+ 
 	    	    fr.getEquipmentFlow().getReferenceClosenessValue()+ ")");
-	    System.out.println("Average : " + fr.GetCalculatedAverageClosenessValue());
+	    System.out.println("Average : " + fr.GetCalculatedAverageClosenessValue()+ " ("+ 
+	    	    fr.getReferencedAverageClosenessValue()+ ")");
 	    System.out.println();
 	    
 	    
@@ -156,6 +158,8 @@ public class JFuzzyLearningClass {
 		fr.getMaterialFlow().setReferenceClosenessValue(Double.parseDouble(split[7]));
 		fr.getInformationFlow().setReferenceClosenessValue(Double.parseDouble(split[8]));
 		fr.getEquipmentFlow().setReferenceClosenessValue(Double.parseDouble(split[9]));
+		
+		fr.setReferencedAverageClosenessValue(Double.parseDouble(split[10]));
 		
 		return fr;
 				
