@@ -3,25 +3,35 @@ package ch.fhnw.msc.bis.mso.jfuzzy;
 import java.util.ArrayList;
 
 public class ConstructionSite {
-	private int intitialHeight;
+	private int initialHeight;
 	private int initialWidth;
 	private int currentWidth;
 	private int currentHeight;
 	
-	private Building[] facilities;
-	private Building[] constructedBuildings;
-	private ArrayList<Coordinate> blockedFields;
+	private ArrayList<Building> facilities;
+	private ArrayList<Building> constructedBuildings;
 	
-	public ConstructionSite(Building[] facilities, Building[] constructedBuildings, int height, int width)
+	
+	public ArrayList<Building> getFacilities() {
+		return facilities;
+	}
+
+	public ArrayList<Building> getConstructedBuildings() {
+		return constructedBuildings;
+	}
+	
+	public ConstructionSite(int height, int width)
 	{
-		this.facilities = facilities;
-		this.constructedBuildings = constructedBuildings;
+		this.facilities = new ArrayList<Building>();
+		this.constructedBuildings = new ArrayList<Building>();
 		this.initialWidth = width;
-		this.intitialHeight = height;
+		this.initialHeight = height;
+		currentHeight = initialHeight;
+		currentWidth = initialWidth;
 	}
 	
 	public int getIntitialHeight() {
-		return intitialHeight;
+		return initialHeight;
 	}
 	
 	public int getInitialWidth() {
@@ -41,24 +51,46 @@ public class ConstructionSite {
 		this.currentHeight = currentHeight;
 	}
 	
-	public boolean isCollisionDetected(Building newBuilding)
+	public boolean hasBuildingValidPosition(Building testBuilding)
 	{
-		//Vergleiche mit den anderen Gebäuden -- ausser mit sich selber
-		for (Building building : facilities) {
-			if(building.id.equals(newBuilding.id))
-				continue;
+		ArrayList<Building> allBuildings = (ArrayList<Building>) facilities.clone();
+		allBuildings.addAll(constructedBuildings);
 		
-		//Vergleiche mit L
-		//Vergleiche im Bereich Construction Site
+		for (Building building : allBuildings) {
+			if(building.id.equals(testBuilding.id))
+				continue;
+			
+			if (doBuildingsOverlap(testBuilding,building))
+				return true;
+		}
+		if (isBuildingOutsideBoundary(testBuilding))
+			return true;
+		return false;
+	}
+	
+	private boolean doBuildingsOverlap(Building firstBuilding, Building secondBuilding)
+	{
+		for (Coordinate currentBlock: firstBuilding.blockedPositions)
+		{
+			if (secondBuilding.blockedPositions.contains(currentBlock))
+				return true;
+			
 		}
 		return false;
 	}
 	
-	public void initializeRandomLayout()
+	private boolean isBuildingOutsideBoundary(Building building)
 	{
-		
+		for(Coordinate position: building.blockedPositions)
+		{
+		double x =position.getX();
+		double y = position.getY();
+		if(x < 0 || x > currentWidth || y < 0 || y > currentHeight) 
+			return true;
+		}
+		return false;
 	}
-	
+		
 	public void printCurrentLayout()
 	{
 		
