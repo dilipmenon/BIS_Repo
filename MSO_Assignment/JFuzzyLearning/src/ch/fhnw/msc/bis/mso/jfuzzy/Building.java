@@ -51,17 +51,7 @@ public class Building {
 	
 	public void resetPosition(int x, int y, int rotation)
 	{
-		int counter=0;
-		  while(counter<height*width)
-		  {
-		  blockedPositions[counter++]= 
-		  }
-		  
-		// x + y neu setzen
 		
-		
-		// berechnung blockedposition
-
 		
 		
 		
