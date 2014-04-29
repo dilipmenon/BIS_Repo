@@ -64,22 +64,32 @@ public class Building {
 		this.positiony = y;
 		blockedPositions.clear();
 		
-		for (int i=x; i<=width; i++)
+		for (int i=0; i<width; i++)
 		  {
-			rotation = 
-			blockedPositions.add(new Coordinate(i,y));
+			if (rotation == false)
+			{
+			blockedPositions.add(new Coordinate(x+i,y));
+			}
+			else
+			{
+			blockedPositions.add(new Coordinate(y,x+i));
+			}
+				
 		  }
 		
-		for (int i=y; i<=height; i++)
+		for (int i=0; i<=height; i++)
 		  {
-			blockedPositions.add(new Coordinate(x,i));
+			if (rotation == false)
+			{
+			blockedPositions.add(new Coordinate(x,i+y));
+			}
+			else
+			{
+			blockedPositions.add(new Coordinate(i+y,x));	
+			}
 		  }
 		  
 		// Schwerpunkt berechnen
-		  
-		  
-		// x + y neu setzen
-		// berechnung blockedposition
 
 		
 		
