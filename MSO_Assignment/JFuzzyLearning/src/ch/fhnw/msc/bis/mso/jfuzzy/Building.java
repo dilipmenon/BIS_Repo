@@ -11,13 +11,13 @@ public class Building {
 	int height;
 	int width;
 	ArrayList<Coordinate> blockedPositions;
-	double centerOfGravity;
+	ArrayList <Coordinate> centerOfGravity;
 	
-	public double getCenterOfGravity() 
-	{
+
+	public ArrayList<Coordinate> getCenterOfGravity() {
 		return centerOfGravity;
 	}
-	public void setCenterOfGravity(double centerOfGravity) {
+	public void setCenterOfGravity(ArrayList<Coordinate> centerOfGravity) {
 		this.centerOfGravity = centerOfGravity;
 	}
 	public int getPositionx()
@@ -72,7 +72,7 @@ public class Building {
 			}
 			else
 			{
-			blockedPositions.add(new Coordinate(y,x+i));
+			blockedPositions.add(new Coordinate(y+i,x));
 			}
 				
 		  }
@@ -85,14 +85,25 @@ public class Building {
 			}
 			else
 			{
-			blockedPositions.add(new Coordinate(i+y,x));	
+			blockedPositions.add(new Coordinate(y,x+i));	
 			}
 		  }
 		  
-		// Schwerpunkt berechnen
-
+		setGravity(x,y);
+		// Schwerpunkt berechnen		
+		
+	}
+	
+	public void setGravity(int x, int y)
+	{
+		double temp1;
+		double temp2;
 		
 		
+		temp1 = (x + (width-1))/2;
+		temp2 = (y + (height-1))/2;
+		
+		centerOfGravity.add(new Coordinate(temp1, temp2));
 		
 	}
 }
