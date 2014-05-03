@@ -3,20 +3,22 @@ import java.util.ArrayList;
 
 public class Building {
 	
-	int positionx = 3;
-	int positiony = 2;
+	int positionx;
+	int positiony;
 	boolean zeroRotation;
 	String id;
 	int height;
 	int width;
+
 	ArrayList<BuildingBlock> blockedPositions;
-	double centerOfGravity;
+	BuildingBlock centerOfGravity;
+
 	
-	public double getCenterOfGravity() 
-	{
+
+	public BuildingBlock getCenterOfGravity() {
 		return centerOfGravity;
 	}
-	public void setCenterOfGravity(double centerOfGravity) {
+	public void setCenterOfGravity(BuildingBlock centerOfGravity) {
 		this.centerOfGravity = centerOfGravity;
 	}
 	public int getPositionx()
@@ -70,22 +72,57 @@ public class Building {
 	{
 		this.positionx = x;
 		this.positiony = y;
+		this.zeroRotation = rotation;
 		blockedPositions.clear();
 		
-		for (int i=x; i<=width; i++)
+		for (int i=0; i<width; i++)
 		  {
-			rotation = 
+		
 			blockedPositions.add(new BuildingBlock(i,y));
+			if (rotation == false)
+			{
+			blockedPositions.add(new BuildingBlock(x+i,y));
+			}
+			else
+			{
+			blockedPositions.add(new BuildingBlock(y+i,x));
+			}
+				
+
 		  }
 		
-		for (int i=y; i<=height; i++)
+		for (int i=0; i<=height; i++)
 		  {
+
 			blockedPositions.add(new BuildingBlock(x,i));
+
+			if (rotation == false)
+			{
+			blockedPositions.add(new BuildingBlock(x,i+y));
+			}
+			else
+			{
+			blockedPositions.add(new BuildingBlock(y,x+i));	
+			}
+
 		  }
 		  
-		// Schwerpunkt berechnen
+
+		setGravity(x,y);
 	
+	}
+	
+	public void setGravity(int x, int y)
+	{
+		double temp1;
+		double temp2;
 		
+
+		
+		temp1 = (x + (width-1))/2;
+		temp2 = (y + (height-1))/2;
+		
+		centerOfGravity = new BuildingBlock(temp1, temp2);
 		
 	}
 }
