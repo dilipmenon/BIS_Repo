@@ -1,19 +1,18 @@
 package ch.fhnw.msc.bis.mso.jfuzzy;
+import java.awt.Point;
 
 
-import java.awt.geom.Point2D;
-
-public class BuildingBlock extends Point2D {
+public class BuildingBlock extends Point {
 	
-	private double x;
-	private double y;
+	private int x;
+	private int y;
 
-	public BuildingBlock(double x, double y)
+	public BuildingBlock(int x, int y)
 	{
 		setLocation(x,y);
 		
 	}
-	@Override
+
 	public double getX() {
 		// TODO Auto-generated method stub
 		return this.x;
@@ -26,7 +25,7 @@ public class BuildingBlock extends Point2D {
 	}
 
 	@Override
-	public void setLocation(double x, double y) {
+	public void setLocation(int x, int y) {
 		// TODO Auto-generated method stub
 		this.x = x;
 		this.y = y;

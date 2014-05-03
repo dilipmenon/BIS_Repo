@@ -10,10 +10,10 @@ public class ConstructionSite {
 	private int currentWidth;
 	private int currentHeight;
 
-	private Map<Integer, Building> facilities;
+	private Map<String, Building> facilities;
 	private Map<Integer, Building> constructedBuildings;
 
-	public Map<Integer, Building> getFacilities() {
+	public Map<String, Building> getFacilities() {
 		return facilities;
 	}
 
@@ -22,7 +22,7 @@ public class ConstructionSite {
 	}
 
 	public ConstructionSite(int height, int width) {
-		this.facilities = new HashMap<Integer, Building>();
+		this.facilities = new HashMap<String, Building>();
 		this.constructedBuildings = new HashMap<Integer, Building>();
 		this.initialWidth = width;
 		this.initialHeight = height;
@@ -55,10 +55,10 @@ public class ConstructionSite {
 	}
 
 	public ArrayList<Building> getAllBuildings() {
-		ArrayList<Building> allBuildings = (ArrayList<Building>) facilities
-				.values();
+		ArrayList<Building> allBuildings = new ArrayList<Building>(facilities
+				.values());
 		allBuildings
-				.addAll((ArrayList<Building>) constructedBuildings.values());
+				.addAll(new ArrayList<Building>(constructedBuildings.values()));
 		return allBuildings;
 	}
 
@@ -78,8 +78,8 @@ public class ConstructionSite {
 
 	private boolean doBuildingsOverlap(Building firstBuilding,
 			Building secondBuilding) {
-		for (BuildingBlock currentBlock : firstBuilding.blockedPositions) {
-			if (secondBuilding.blockedPositions.contains(currentBlock))
+		for (BuildingBlock currentBlock : firstBuilding.occupiedBlocks) {
+			if (secondBuilding.occupiedBlocks.contains(currentBlock))
 				return true;
 
 		}
@@ -87,7 +87,7 @@ public class ConstructionSite {
 	}
 
 	private boolean isBuildingOutsideBoundary(Building building) {
-		for (BuildingBlock position : building.blockedPositions) {
+		for (BuildingBlock position : building.occupiedBlocks) {
 			double x = position.getX();
 			double y = position.getY();
 			if (x < 1 || x > currentWidth || y < 1 || y > currentHeight)
@@ -100,26 +100,34 @@ public class ConstructionSite {
 		Building facility = this.facilities.get(id);
 
 		if (facility != null)
-			facility.blockedPositions.clear();
+			facility.occupiedBlocks.clear();
 
-		ArrayList<BuildingBlock> availableBlocks = getFreeBlocks();
+		ArrayList<BuildingBlock> availableBlocks = getFreeBuildingBlocks();
+		availableBlocks.size();
 		BuildingBlock randomBlock = null;
 
 		boolean facilityPlaced = false;
 
-		while (!facilityPlaced || availableBlocks.size() > 0) {
+		while (!facilityPlaced && availableBlocks.size() > 0) {
 
 			facilityPlaced = true;
 			randomBlock = availableBlocks
 					.get((int) (Math.random() * availableBlocks.size()));
+			
+			//1st attempt
 			facility.setPosition((int) randomBlock.getX(),
 					(int) randomBlock.getY(), false);
 
 			if (!hasBuildingValidPosition(facility)) {
-			
+				//2nd attempt: Rotate and try again
+				facility.setPosition((int) randomBlock.getX(),
+						(int) randomBlock.getY(), true);
 
+				
 				if (!hasBuildingValidPosition(facility)) {
+					// Even not valid with rotation
 					availableBlocks.remove(randomBlock);
+					
 					facilityPlaced = false;
 				}
 
@@ -129,10 +137,10 @@ public class ConstructionSite {
 
 	}
 
-	private ArrayList<BuildingBlock> getFreeBlocks() {
+	private ArrayList<BuildingBlock> getFreeBuildingBlocks() {
 		ArrayList<BuildingBlock> freeBlocks = new ArrayList<BuildingBlock>();
-		for (int currentX = 0; currentX < this.currentWidth; currentX++) {
-			for (int currentY = 0; currentY < this.currentHeight; currentY++) {
+		for (int currentX = 1; currentX < this.currentWidth; currentX++) {
+			for (int currentY = 1; currentY < this.currentHeight; currentY++) {
 				freeBlocks.add(new BuildingBlock(currentX, currentY));
 			}
 		}
@@ -145,7 +153,7 @@ public class ConstructionSite {
 		ArrayList<Building> allBuildings = getAllBuildings();
 		ArrayList<BuildingBlock> occupiedBlocks = new ArrayList<BuildingBlock>();
 		for (Building building : allBuildings) {
-			occupiedBlocks.addAll(building.blockedPositions);
+			occupiedBlocks.addAll(building.occupiedBlocks);
 
 		}
 		return occupiedBlocks;

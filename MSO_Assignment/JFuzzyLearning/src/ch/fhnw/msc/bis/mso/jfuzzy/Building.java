@@ -1,35 +1,27 @@
 package ch.fhnw.msc.bis.mso.jfuzzy;
 import java.util.ArrayList;
+import java.awt.Point;
 
 public class Building {
 	
-	int positionx;
-	int positiony;
-	//boolean zeroRotation;
 	String id;
 	int height;
 	int width;
+	private Point positionOfUpperLeftCorner = new Point();
+	Point centreOfGravity = new Point();
 
-
-	ArrayList<BuildingBlock> blockedPositions;
-	BuildingBlock centerOfGravity;
+	ArrayList<BuildingBlock> occupiedBlocks;
+	
 
 	
 
-	public BuildingBlock getCenterOfGravity() {
-		return centerOfGravity;
+	public Point getCentreOfGravity() {
+		return centreOfGravity;
 	}
-	public void setCenterOfGravity(BuildingBlock centerOfGravity) {
-		this.centerOfGravity = centerOfGravity;
+	public void setCenterOfGravity(Point centreOfGravity) {
+		this.centreOfGravity = centreOfGravity;
 	}
-	public int getPositionx()
-	{
-		return positionx;
-	}
-	public int getPositiony()
-	{
-		return positiony;
-	}
+
 	
 	public int getHeight()
 	{
@@ -43,15 +35,14 @@ public class Building {
 	{
 		return id;
 	}
-	
-	
+		
 	public Building(String name, int height, int width)
 	{
 	
 		this.height = height;
 		this.width = width;
 		this.id = name;
-		blockedPositions = new ArrayList<BuildingBlock>();
+		occupiedBlocks = new ArrayList<BuildingBlock>();
 		
 	}
 	
@@ -61,58 +52,51 @@ public class Building {
 		this.height = height;
 		this.width = width;
 		this.id = name;
-		blockedPositions = new ArrayList<BuildingBlock>();
+		occupiedBlocks = new ArrayList<BuildingBlock>();
 		setPosition(x, y, rotation);
 		
 	}
 	
-	public void setPosition(int x, int y, boolean rotation)
+	public void setPosition(int x, int y, boolean rotate)
 	{
-		this.positionx = x;
-		this.positiony = y;
+		this.positionOfUpperLeftCorner.setLocation(x, y);
+		occupiedBlocks.clear();
 		
-		
-		blockedPositions.clear();
-		
-		if(rotation){
+		if(rotate){
 			int originalHeight = this.height;
 			this.height = this.width;
 			this.width = originalHeight;	
 		}
-	
-		
-		
-		
-		
-		for (int i=positiony;i<positiony+height;i++)
+			
+		int i = y;
+		int z = x;
+		for (i=i ;i<y+height;i++)
 		{
-			blockedPositions.add(new BuildingBlock(positionx,positiony));
-			for (int z=positionx;z<positionx+width;z++)
+			occupiedBlocks.add(new BuildingBlock(z,i));
+			for (z=z;z<x+width;z++)
 			{
-				positionx++;
-				blockedPositions.add(new BuildingBlock(positionx,positiony));				
+			
+				occupiedBlocks.add(new BuildingBlock(z,i));				
 			}
-			positiony++;
+			
 				
 		}
-		
-		
-		
-		setGravity(x,y);
-	
+		setCentreOfGravity(x,y);
 	}
 	
-	public void setGravity(int x, int y)
+	public void setCentreOfGravity(int x, int y)
 	{
 		double temp1;
 		double temp2;
-		
-
-		
+			
 		temp1 = (x + (width-1))/2;
 		temp2 = (y + (height-1))/2;
 		
-		centerOfGravity = new BuildingBlock(temp1, temp2);
-		
+		centreOfGravity.setLocation(temp1, temp2);;
 	}
+	
+	Point getPositionOfUpperLeftCorner() {
+		return positionOfUpperLeftCorner;
+	}
+	
 }
