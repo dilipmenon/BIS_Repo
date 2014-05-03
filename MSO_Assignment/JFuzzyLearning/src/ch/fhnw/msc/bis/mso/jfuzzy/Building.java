@@ -10,6 +10,7 @@ public class Building {
 	int height;
 	int width;
 
+
 	ArrayList<BuildingBlock> blockedPositions;
 	BuildingBlock centerOfGravity;
 
@@ -75,6 +76,21 @@ public class Building {
 		this.zeroRotation = rotation;
 		blockedPositions.clear();
 		
+		
+		for (int i=positiony;i<positiony+height;i++)
+		{
+			blockedPositions.add(new BuildingBlock(positionx,positiony));
+			for (int z=positionx;z<positionx+width;z++)
+			{
+				positionx++;
+				blockedPositions.add(new BuildingBlock(positionx,positiony));				
+			}
+			positiony++;
+				
+		}
+		
+		
+		/*
 		for (int i=0; i<width; i++)
 		  {
 		
@@ -106,7 +122,7 @@ public class Building {
 			}
 
 		  }
-		  
+		  */
 
 		setGravity(x,y);
 	
