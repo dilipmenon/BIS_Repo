@@ -5,7 +5,7 @@ public class Building {
 	
 	int positionx;
 	int positiony;
-	boolean zeroRotation;
+	//boolean zeroRotation;
 	String id;
 	int height;
 	int width;
@@ -30,10 +30,7 @@ public class Building {
 	{
 		return positiony;
 	}
-	public boolean getRotation()
-	{
-		return zeroRotation;
-	}
+	
 	public int getHeight()
 	{
 		return height;
@@ -73,8 +70,18 @@ public class Building {
 	{
 		this.positionx = x;
 		this.positiony = y;
-		this.zeroRotation = rotation;
+		
+		
 		blockedPositions.clear();
+		
+		if(rotation){
+			int originalHeight = this.height;
+			this.height = this.width;
+			this.width = originalHeight;	
+		}
+	
+		
+		
 		
 		
 		for (int i=positiony;i<positiony+height;i++)
@@ -90,40 +97,7 @@ public class Building {
 		}
 		
 		
-		/*
-		for (int i=0; i<width; i++)
-		  {
 		
-			blockedPositions.add(new BuildingBlock(i,y));
-			if (rotation == false)
-			{
-			blockedPositions.add(new BuildingBlock(x+i,y));
-			}
-			else
-			{
-			blockedPositions.add(new BuildingBlock(y+i,x));
-			}
-				
-
-		  }
-		
-		for (int i=0; i<=height; i++)
-		  {
-
-			blockedPositions.add(new BuildingBlock(x,i));
-
-			if (rotation == false)
-			{
-			blockedPositions.add(new BuildingBlock(x,i+y));
-			}
-			else
-			{
-			blockedPositions.add(new BuildingBlock(y,x+i));	
-			}
-
-		  }
-		  */
-
 		setGravity(x,y);
 	
 	}
