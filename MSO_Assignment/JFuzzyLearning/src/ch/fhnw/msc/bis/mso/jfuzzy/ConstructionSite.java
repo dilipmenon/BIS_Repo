@@ -1,6 +1,9 @@
 package ch.fhnw.msc.bis.mso.jfuzzy;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ConstructionSite {
 	private int initialHeight;
@@ -8,22 +11,22 @@ public class ConstructionSite {
 	private int currentWidth;
 	private int currentHeight;
 	
-	private ArrayList<Building> facilities;
-	private ArrayList<Building> constructedBuildings;
+	private Map<Integer,Building> facilities;
+	private Map<Integer,Building> constructedBuildings;
 	
 	
-	public ArrayList<Building> getFacilities() {
+	public Map<Integer,Building> getFacilities() {
 		return facilities;
 	}
 
-	public ArrayList<Building> getConstructedBuildings() {
+	public Map<Integer,Building> getConstructedBuildings() {
 		return constructedBuildings;
 	}
 	
 	public ConstructionSite(int height, int width)
 	{
-		this.facilities = new ArrayList<Building>();
-		this.constructedBuildings = new ArrayList<Building>();
+		this.facilities = new HashMap<Integer,Building>();
+		this.constructedBuildings = new HashMap<Integer,Building>();
 		this.initialWidth = width;
 		this.initialHeight = height;
 		currentHeight = initialHeight;
@@ -51,11 +54,16 @@ public class ConstructionSite {
 		this.currentHeight = currentHeight;
 	}
 	
+	public ArrayList<Building> getAllBuildings()
+	{
+		ArrayList<Building> allBuildings = (ArrayList<Building>) facilities.values();
+		allBuildings.addAll( (ArrayList<Building>)constructedBuildings.values());
+		return allBuildings;
+	}
+	
 	public boolean hasBuildingValidPosition(Building testBuilding)
 	{
-		ArrayList<Building> allBuildings = (ArrayList<Building>) facilities.clone();
-		allBuildings.addAll(constructedBuildings);
-		
+		ArrayList<Building> allBuildings = getAllBuildings();
 		for (Building building : allBuildings) {
 			if(building.id.equals(testBuilding.id))
 				continue;
@@ -70,7 +78,7 @@ public class ConstructionSite {
 	
 	private boolean doBuildingsOverlap(Building firstBuilding, Building secondBuilding)
 	{
-		for (Coordinate currentBlock: firstBuilding.blockedPositions)
+		for (BuildingBlock currentBlock: firstBuilding.blockedPositions)
 		{
 			if (secondBuilding.blockedPositions.contains(currentBlock))
 				return true;
@@ -81,7 +89,7 @@ public class ConstructionSite {
 	
 	private boolean isBuildingOutsideBoundary(Building building)
 	{
-		for(Coordinate position: building.blockedPositions)
+		for(BuildingBlock position: building.blockedPositions)
 		{
 		double x =position.getX();
 		double y = position.getY();
@@ -90,7 +98,65 @@ public class ConstructionSite {
 		}
 		return false;
 	}
+	
+	public boolean placeFacilityRandomly(String id)
+	{
+		Building building = this.facilities.get(id);
 		
+		if (building != null)
+			building.blockedPositions.clear();
+		
+		ArrayList<BuildingBlock> availableBlocks = getFreeBlocks();
+		BuildingBlock randomBlock = null;
+		boolean facilityPlaced = false;
+		
+		while(!facilityPlaced || availableBlocks.size() > 0)
+		{
+			facilityPlaced = true;
+		randomBlock = availableBlocks.get((int)(Math.random()*availableBlocks.size()));
+		building.setPosition((int)randomBlock.getX() ,(int)randomBlock.getY(),false);
+		
+		if (!hasBuildingValidPosition(building))
+		{
+			building.setPosition((int)randomBlock.getX() ,(int)randomBlock.getY(),false);
+			if (!hasBuildingValidPosition(building))
+			{
+				availableBlocks.remove(randomBlock);
+				facilityPlaced = false;
+			}
+			
+		}
+		
+		}
+		
+		return facilityPlaced;
+	
+	}
+		
+	private ArrayList<BuildingBlock> getFreeBlocks() {
+		ArrayList<BuildingBlock> freeBlocks = new ArrayList<BuildingBlock>();
+		for (int currentX=0;currentX < this.currentWidth;currentX++)
+		{
+			for(int currentY = 0; currentY < this.currentHeight;currentY++)
+			{
+				freeBlocks.add(new BuildingBlock(currentX,currentY));
+			}
+		}
+		freeBlocks.removeAll(getOccupiedBuildingBlocks());
+		return freeBlocks;
+		
+	}
+
+	private ArrayList<BuildingBlock> getOccupiedBuildingBlocks() {
+		ArrayList<Building> allBuildings = getAllBuildings();
+		ArrayList<BuildingBlock> occupiedBlocks = new ArrayList<BuildingBlock>();
+		for (Building building : allBuildings) {
+			occupiedBlocks.addAll(building.blockedPositions);
+		
+		}
+		return occupiedBlocks;
+	}
+
 	public void printCurrentLayout()
 	{
 		

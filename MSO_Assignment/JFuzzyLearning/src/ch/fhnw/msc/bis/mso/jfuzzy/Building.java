@@ -1,5 +1,4 @@
 package ch.fhnw.msc.bis.mso.jfuzzy;
-import java.awt.geom.*;
 import java.util.ArrayList;
 
 public class Building {
@@ -10,7 +9,7 @@ public class Building {
 	String id;
 	int height;
 	int width;
-	ArrayList<Coordinate> blockedPositions;
+	ArrayList<BuildingBlock> blockedPositions;
 	double centerOfGravity;
 	
 	public double getCenterOfGravity() 
@@ -46,15 +45,24 @@ public class Building {
 	}
 	
 	
-	public Building(int x, int y, boolean rotation, String name, int height, int width)
+	public Building(String name, int height, int width)
 	{
-		this.positionx = x;
-		this.positiony = y;
+	
 		this.height = height;
-		this.zeroRotation = rotation;
 		this.width = width;
 		this.id = name;
-		blockedPositions = new ArrayList<Coordinate>();
+		blockedPositions = new ArrayList<BuildingBlock>();
+		
+	}
+	
+	public Building(String name, int height, int width, int x, int y, boolean rotation)
+	{
+	
+		this.height = height;
+		this.width = width;
+		this.id = name;
+		blockedPositions = new ArrayList<BuildingBlock>();
+		setPosition(x, y, rotation);
 		
 	}
 	
@@ -67,12 +75,12 @@ public class Building {
 		for (int i=x; i<=width; i++)
 		  {
 			rotation = 
-			blockedPositions.add(new Coordinate(i,y));
+			blockedPositions.add(new BuildingBlock(i,y));
 		  }
 		
 		for (int i=y; i<=height; i++)
 		  {
-			blockedPositions.add(new Coordinate(x,i));
+			blockedPositions.add(new BuildingBlock(x,i));
 		  }
 		  
 		// Schwerpunkt berechnen
