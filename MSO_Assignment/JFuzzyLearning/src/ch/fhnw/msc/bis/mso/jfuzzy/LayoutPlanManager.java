@@ -8,8 +8,8 @@ public class LayoutPlanManager {
 	
 	public static void main(String[] args)
 	{
-		int siteHeight = 100;
-		int siteWidth = 200;
+		int siteHeight = 19;
+		int siteWidth = 22;
 		
 		System.out.println("Welcome!!!");
 		System.out.println();
@@ -18,8 +18,10 @@ public class LayoutPlanManager {
 		
 		//Initialize Constructed Building
 		mySite.getConstructedBuildings().put(0,new Building("6",12,6,2,5,false));
-		mySite.getConstructedBuildings().put(1,new Building("6",6,12,8, 11, false));
-		
+		mySite.getConstructedBuildings().put(1,new Building("6",6,12,8,11, false));
+		System.out.println("********");
+		mySite.printCurrentLayout();
+		System.out.println("********");
 		//Initialize Facility Building Base Data
 		mySite.getFacilities().put("1",new Building("1",4,2));
 		mySite.getFacilities().put("2",new Building("2",3,4));
@@ -35,7 +37,7 @@ public class LayoutPlanManager {
 		{
 		Building randomFacility = temporaryCollection.get((int)(Math.random()*temporaryCollection.size()));
 	
-		if(mySite.placeFacilityRandomly(randomFacility.id))
+		if(!mySite.placeFacilityRandomly(randomFacility.id))
 		{
 			System.out.println(randomFacility.id + ": failed to place it on Site without violation");
 		}
@@ -49,7 +51,12 @@ public class LayoutPlanManager {
 		
 		}
 		System.out.println();
-		System.out.println("***Finished application.***");	
+		System.out.println("***Finished Layouting.***");	
+		System.out.println();
+		mySite.printCurrentLayout();
+		
+		System.out.println();
+		System.out.println("***Exiting application.***");	
 		System.out.println("***Have a nice day.***");
 		
 	}

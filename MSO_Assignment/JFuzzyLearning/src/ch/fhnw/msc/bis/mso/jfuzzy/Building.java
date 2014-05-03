@@ -68,17 +68,15 @@ public class Building {
 			this.width = originalHeight;	
 		}
 			
-		int i = y;
-		int z = x;
-		for (i=i ;i<y+height;i++)
+		
+		for (int i=y ;i<y+height;i++)
 		{
-			occupiedBlocks.add(new BuildingBlock(z,i));
-			for (z=z;z<x+width;z++)
+			//occupiedBlocks.add(new BuildingBlock(z,i));
+			
+			for (int z=x;z<x+width;z++)
 			{
-			
-				occupiedBlocks.add(new BuildingBlock(z,i));				
+			occupiedBlocks.add(new BuildingBlock(z,i));				
 			}
-			
 				
 		}
 		setCentreOfGravity(x,y);

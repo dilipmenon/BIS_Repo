@@ -55,10 +55,10 @@ public class ConstructionSite {
 	}
 
 	public ArrayList<Building> getAllBuildings() {
-		ArrayList<Building> allBuildings = new ArrayList<Building>(facilities
-				.values());
-		allBuildings
-				.addAll(new ArrayList<Building>(constructedBuildings.values()));
+		ArrayList<Building> allBuildings = new ArrayList<Building>(
+				facilities.values());
+		allBuildings.addAll(new ArrayList<Building>(constructedBuildings
+				.values()));
 		return allBuildings;
 	}
 
@@ -69,11 +69,11 @@ public class ConstructionSite {
 				continue;
 
 			if (doBuildingsOverlap(testBuilding, building))
-				return true;
+				return false;
 		}
 		if (isBuildingOutsideBoundary(testBuilding))
-			return true;
-		return false;
+			return false;
+		return true;
 	}
 
 	private boolean doBuildingsOverlap(Building firstBuilding,
@@ -113,21 +113,20 @@ public class ConstructionSite {
 			facilityPlaced = true;
 			randomBlock = availableBlocks
 					.get((int) (Math.random() * availableBlocks.size()));
-			
-			//1st attempt
+
+			// 1st attempt
 			facility.setPosition((int) randomBlock.getX(),
 					(int) randomBlock.getY(), false);
 
 			if (!hasBuildingValidPosition(facility)) {
-				//2nd attempt: Rotate and try again
+				// 2nd attempt: Rotate and try again
 				facility.setPosition((int) randomBlock.getX(),
 						(int) randomBlock.getY(), true);
 
-				
 				if (!hasBuildingValidPosition(facility)) {
-					// Even not valid with rotation
+					// Even not valid after rotation
 					availableBlocks.remove(randomBlock);
-					
+
 					facilityPlaced = false;
 				}
 
@@ -159,8 +158,23 @@ public class ConstructionSite {
 		return occupiedBlocks;
 	}
 
-	public void printCurrentLayout() {
+	private String retrieveBuildingIdOfGivenBlock(BuildingBlock myBlock) {
+		for (Building building : getAllBuildings()) {
+			if (building.occupiedBlocks.contains(myBlock)) {
+				return building.id;
+			}
+		}
+		return "_";
+	}
 
+	public void printCurrentLayout() {
+		for (int currentX = 1; currentX < this.currentWidth; currentX++) {
+			for (int currentY = 1; currentY < this.currentHeight; currentY++) {
+            System.out.print(retrieveBuildingIdOfGivenBlock(new BuildingBlock(
+								currentX, currentY)));
+			}
+			System.out.println();
+		}
 	}
 
 }
