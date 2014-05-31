@@ -16,23 +16,13 @@ import net.sourceforge.jFuzzyLogic.plot.JFuzzyChart;
 import net.sourceforge.jFuzzyLogic.rule.Variable;
 
 public class JFuzzyLearningClass {
-	public static void main(String[] args) throws Exception {
-	    Map<String, String> fclFiles = new HashMap<>();
-	    
-	    final String referenceDataFile = "..\\JFuzzyLearning\\InputFiles\\FuzzyGeneticRefData.csv";
+	public static void main(String[] args) {
+	   
 		List<FacilityRelation> facilityRelations = new ArrayList<FacilityRelation>();
+		 final String referenceDataFile = "..\\JFuzzyLearning\\InputFiles\\FuzzyGeneticRefData.csv";
+	    initializeFacilityRelations(facilityRelations,referenceDataFile);
+	   
 		
-	    
-	    fclFiles.put(FlowType.INFORMATION.toString(),"..\\JFuzzyLearning\\InputFiles\\InformationFlow_WeightFactor.fcl" );
-		fclFiles.put(FlowType.MATERIAL.toString(),"..\\JFuzzyLearning\\InputFiles\\MaterialFlow_WeightFactor.fcl" );
-		fclFiles.put(FlowType.EQUIPMENT.toString(),"..\\JFuzzyLearning\\InputFiles\\EquipmentFlow_WeightFactor.fcl" );
-		
-	    InitializeReferenceDataFromFile(facilityRelations, referenceDataFile);
-	    
-	    for (String s : fclFiles.keySet()) {
-	        ApplyFuzzyLogic(s,fclFiles.get(s),facilityRelations);
-	    
-	    }
 	    
 	    for(FacilityRelation fr: facilityRelations){
 	    System.out.println("****"+fr.getRelationshipIdentifier()+"****");
@@ -88,6 +78,23 @@ public class JFuzzyLearningClass {
 
 	}
 	
+	private static void initializeFacilityRelations(List<FacilityRelation> facilityRelations, String referenceDataFile)
+	{
+		//List<FacilityRelation> facilityRelations = new ArrayList<FacilityRelation>();
+		
+		 Map<String, String> fclFiles = new HashMap<>();
+	    fclFiles.put(FlowType.INFORMATION.toString(),"..\\JFuzzyLearning\\InputFiles\\InformationFlow_WeightFactor.fcl" );
+		fclFiles.put(FlowType.MATERIAL.toString(),"..\\JFuzzyLearning\\InputFiles\\MaterialFlow_WeightFactor.fcl" );
+		fclFiles.put(FlowType.EQUIPMENT.toString(),"..\\JFuzzyLearning\\InputFiles\\EquipmentFlow_WeightFactor.fcl" );
+		
+	    InitializeReferenceDataFromFile(facilityRelations, referenceDataFile);
+	    
+	    for (String s : fclFiles.keySet()) {
+	        ApplyFuzzyLogic(s,fclFiles.get(s),facilityRelations);
+	    
+	    }
+	}
+	
 	private static void ApplyFuzzyLogic(String key, String filename,
 			List<FacilityRelation> facilityRelations) {
 		FIS fis = FIS.load(filename, true);
@@ -99,6 +106,7 @@ public class JFuzzyLearningClass {
 
 		// Get default function block
 		FunctionBlock fb = fis.getFunctionBlock(null);
+		JFuzzyChart.get().chart(fb);
 		for(FacilityRelation fr : facilityRelations)
 		{
 		FlowData fd = fr.getFlowDataByType(FlowType.valueOf(key));	
@@ -145,7 +153,7 @@ public class JFuzzyLearningClass {
 
 	private static FacilityRelation GetFacilityRelationFromRow(String[] split) {
 		//Facility;MF;IF;EF;MFW;IFW;EFW;MF_CL;IF_CL;EF_CL
-		FacilityRelation fr = new FacilityRelation(split[0]);
+		FacilityRelation fr = new FacilityRelation(Integer.parseInt(split[0].split("-")[0]),Integer.parseInt(split[0].split("-")[1]));
 		
 		fr.getMaterialFlow().setFlowValue(Double.parseDouble(split[1]));
 		fr.getInformationFlow().setFlowValue(Double.parseDouble(split[2]));
@@ -175,6 +183,8 @@ public class JFuzzyLearningClass {
 
 		// Evaluate
 		fb.evaluate();
+		
+		//JFuzzyChart.get().chart( fb.getVariable(key).getDefuzzifier(),key,true);
 		calculatedOutput = fb.getVariable("closenessRelation").getValue();
 		
 		return calculatedOutput;

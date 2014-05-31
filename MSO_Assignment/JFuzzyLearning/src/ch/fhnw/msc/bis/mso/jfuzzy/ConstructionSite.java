@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ConstructionSite {
+
+
+public class ConstructionSite   {
 	private int initialHeight;
 	private int initialWidth;
 	private int currentWidth;
@@ -28,6 +30,7 @@ public class ConstructionSite {
 		this.initialHeight = height;
 		currentHeight = initialHeight;
 		currentWidth = initialWidth;
+		
 	}
 
 	public int getIntitialHeight() {
@@ -61,9 +64,14 @@ public class ConstructionSite {
 				.values()));
 		return allBuildings;
 	}
+	
 
 	public boolean hasBuildingValidPosition(Building testBuilding) {
+		if (isBuildingOutsideBoundary(testBuilding))
+			return false;
+		
 		ArrayList<Building> allBuildings = getAllBuildings();
+		
 		for (Building building : allBuildings) {
 			if (building.id.equals(testBuilding.id))
 				continue;
@@ -71,11 +79,21 @@ public class ConstructionSite {
 			if (doBuildingsOverlap(testBuilding, building))
 				return false;
 		}
-		if (isBuildingOutsideBoundary(testBuilding))
-			return false;
+		
 		return true;
 	}
-
+	
+	public double getDistance(Building firstBuilding, Building secondBuilding)
+	{
+		return Math.pow(Math.pow(firstBuilding.centreOfGravity.x - secondBuilding.centreOfGravity.x,2)
+		+Math.pow(firstBuilding.centreOfGravity.y-secondBuilding.centreOfGravity.y, 2),0.5);
+	}
+	
+	public double getCloseness(Building firstBuilding, Building secondBuilding)
+	{
+	return 0.00;
+	}
+	
 	private boolean doBuildingsOverlap(Building firstBuilding,
 			Building secondBuilding) {
 		for (BuildingBlock currentBlock : firstBuilding.occupiedBlocks) {
@@ -84,6 +102,29 @@ public class ConstructionSite {
 
 		}
 		return false;
+	}
+	
+	public ArrayList<Building> getBuildingById(int id)
+	{
+	 ArrayList<Building> result =  new ArrayList<Building>();
+	 //First try to receive a facility with given id
+	 Building facility = getFacilities().get(id);
+	 
+	 if(facility != null)
+	 {
+		 result.add(facility);
+	 }
+	 //Otherwise try to retrieve construction building(s) with given id
+	 else {
+			for (Building construction : getConstructedBuildings().values()) {
+				if(Integer.parseInt(construction.getId()) == id)
+				{
+					result.add(construction);
+				}
+			}
+	 }
+	 return result;
+	 
 	}
 
 	private boolean isBuildingOutsideBoundary(Building building) {
@@ -103,7 +144,7 @@ public class ConstructionSite {
 			facility.occupiedBlocks.clear();
 
 		ArrayList<BuildingBlock> availableBlocks = getFreeBuildingBlocks();
-		availableBlocks.size();
+		
 		BuildingBlock randomBlock = null;
 
 		boolean facilityPlaced = false;
@@ -164,17 +205,39 @@ public class ConstructionSite {
 				return building.id;
 			}
 		}
-		return "_";
+		return "+";
 	}
 
 	public void printCurrentLayout() {
-		for (int currentX = 1; currentX < this.currentWidth; currentX++) {
-			for (int currentY = 1; currentY < this.currentHeight; currentY++) {
+		for (int currentY = 1; currentY <= this.currentHeight; currentY++) {
+			for (int currentX = 1; currentX <= this.currentWidth; currentX++) {
             System.out.print(retrieveBuildingIdOfGivenBlock(new BuildingBlock(
 								currentX, currentY)));
 			}
 			System.out.println();
 		}
 	}
-
+	
+	public double getDistance(int idFirstBuilding, int idSecondBuilding){
+	double distance = 0.00;	
+	int numberOfFirstBuildings = 0;
+	int numberOfSecondBuildings = 0;
+	
+	
+		for (Building buildingFirst :  getBuildingById(idFirstBuilding)) {
+			numberOfFirstBuildings++;
+			for (Building buildingSecond :  getBuildingById(idFirstBuilding)) {
+				distance += buildingFirst.getCentreOfGravity().distance(buildingSecond.getCentreOfGravity());
+				numberOfSecondBuildings++;
+			}
+		}
+		int numberOfCalculations = numberOfFirstBuildings*numberOfSecondBuildings;
+		//if one facility or construction building consists of multiple building take the average of the distances
+		if(numberOfCalculations > 1)
+			distance = distance / numberOfCalculations;
+		
+		return distance;
+	}
 }
+	
+	

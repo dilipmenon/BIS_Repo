@@ -8,10 +8,13 @@ public class FacilityRelation {
 	private FlowData materialFlow;
 	private FlowData equipmentFlow;
 	private double referencedAverageClosenessValue;
+	private int firstId, secondId;
 	
-	public FacilityRelation(String relationshipIdentifier)
+	public FacilityRelation(int firstId, int secondId)
 	{
-		this.setRelationshipIdentifier(relationshipIdentifier);
+		this.firstId = firstId;
+	    this.secondId = secondId;
+		this.setRelationshipIdentifier(firstId+"-"+secondId);
 		this.setEquipmentFlow(new FlowData(FlowType.EQUIPMENT));
 		this.setInformationFlow(new FlowData(FlowType.INFORMATION));
 		this.setMaterialFlow(new FlowData(FlowType.MATERIAL));
@@ -78,6 +81,17 @@ public class FacilityRelation {
 			double referencedAverageClosenessValue) {
 		this.referencedAverageClosenessValue = referencedAverageClosenessValue;
 	}
+
+	public int getSecondId() {
+		return secondId;
+	}
+
+
+	public int getFirstId() {
+		return firstId;
+	}
+
+
 	
 
 

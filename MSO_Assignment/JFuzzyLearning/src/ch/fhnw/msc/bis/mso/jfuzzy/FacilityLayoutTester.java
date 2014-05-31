@@ -2,7 +2,7 @@ package ch.fhnw.msc.bis.mso.jfuzzy;
 
 import java.util.ArrayList;
 
-public class LayoutPlanManager {
+public class FacilityLayoutTester {
 	
 	
 	
@@ -11,17 +11,15 @@ public class LayoutPlanManager {
 		int siteHeight = 19;
 		int siteWidth = 22;
 		
-		System.out.println("Welcome!!!");
+		System.out.println("***Welcome!***");
 		System.out.println();
 		System.out.println("***Initializing Site, construction building and facilities.***");
 		ConstructionSite mySite = new ConstructionSite(siteHeight,siteWidth);
 		
 		//Initialize Constructed Building
-		mySite.getConstructedBuildings().put(0,new Building("6",12,6,2,5,false));
-		mySite.getConstructedBuildings().put(1,new Building("6",6,12,8,11, false));
-		System.out.println("********");
-		mySite.printCurrentLayout();
-		System.out.println("********");
+		mySite.getConstructedBuildings().put(0,new Building("6",12,6,3,6));
+		mySite.getConstructedBuildings().put(1,new Building("6",6,12,9,12));
+		
 		//Initialize Facility Building Base Data
 		mySite.getFacilities().put("1",new Building("1",4,2));
 		mySite.getFacilities().put("2",new Building("2",3,4));
@@ -43,7 +41,7 @@ public class LayoutPlanManager {
 		}
 		else {
 			System.out.println(randomFacility.id + ": placed successfully on Site with following coordinates: (" 
-		+ randomFacility.getPositionOfUpperLeftCorner().x + "," + randomFacility.getPositionOfUpperLeftCorner().getY()+")");
+		+ randomFacility.getPositionOfUpperLeftCorner().x + "," + randomFacility.getPositionOfUpperLeftCorner().y+")");
 			
 		}
 		temporaryCollection.remove(randomFacility);

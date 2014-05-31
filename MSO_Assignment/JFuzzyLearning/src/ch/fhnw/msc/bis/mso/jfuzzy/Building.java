@@ -7,6 +7,7 @@ public class Building {
 	String id;
 	int height;
 	int width;
+
 	private Point positionOfUpperLeftCorner = new Point();
 	Point centreOfGravity = new Point();
 
@@ -46,14 +47,14 @@ public class Building {
 		
 	}
 	
-	public Building(String name, int height, int width, int x, int y, boolean rotation)
+	public Building(String name, int height, int width, int x, int y)
 	{
 	
 		this.height = height;
 		this.width = width;
 		this.id = name;
 		occupiedBlocks = new ArrayList<BuildingBlock>();
-		setPosition(x, y, rotation);
+		setPosition(x, y, false);
 		
 	}
 	
@@ -71,7 +72,6 @@ public class Building {
 		
 		for (int i=y ;i<y+height;i++)
 		{
-			//occupiedBlocks.add(new BuildingBlock(z,i));
 			
 			for (int z=x;z<x+width;z++)
 			{
@@ -96,5 +96,17 @@ public class Building {
 	Point getPositionOfUpperLeftCorner() {
 		return positionOfUpperLeftCorner;
 	}
+	
+	public int getLocationReference(int totalWidth)
+	{
+		return  totalWidth*(positionOfUpperLeftCorner.y-1)+positionOfUpperLeftCorner.x;
+	
+	}
+	public void setLocationReference(int reference, int totalWidth) {
+		int y = reference%totalWidth+1;
+		int x = reference - totalWidth*(y-1);
+		setPosition(x, y, false);
+	}
+	
 	
 }
