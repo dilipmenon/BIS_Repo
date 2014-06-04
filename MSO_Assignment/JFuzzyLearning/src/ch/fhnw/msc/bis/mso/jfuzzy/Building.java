@@ -102,10 +102,10 @@ public class Building {
 		return  totalWidth*(positionOfUpperLeftCorner.y-1)+positionOfUpperLeftCorner.x;
 	
 	}
-	public void setLocationReference(int reference, int totalWidth) {
-		int y = reference%totalWidth+1;
-		int x = reference - totalWidth*(y-1);
-		setPosition(x, y, false);
+	public void setLocationReference(int reference, int totalWidth, boolean rotation) {
+		int y = (int)(reference/totalWidth)+1;
+		int x = reference % totalWidth;
+		setPosition(x, y, rotation);
 	}
 	
 	

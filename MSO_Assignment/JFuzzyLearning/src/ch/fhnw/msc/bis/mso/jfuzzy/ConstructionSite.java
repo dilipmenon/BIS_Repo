@@ -108,7 +108,7 @@ public class ConstructionSite   {
 	{
 	 ArrayList<Building> result =  new ArrayList<Building>();
 	 //First try to receive a facility with given id
-	 Building facility = getFacilities().get(id);
+	 Building facility = getFacilities().get(id+"");
 	 
 	 if(facility != null)
 	 {
@@ -226,7 +226,7 @@ public class ConstructionSite   {
 	
 		for (Building buildingFirst :  getBuildingById(idFirstBuilding)) {
 			numberOfFirstBuildings++;
-			for (Building buildingSecond :  getBuildingById(idFirstBuilding)) {
+			for (Building buildingSecond :  getBuildingById(idSecondBuilding)) {
 				distance += buildingFirst.getCentreOfGravity().distance(buildingSecond.getCentreOfGravity());
 				numberOfSecondBuildings++;
 			}
@@ -237,6 +237,19 @@ public class ConstructionSite   {
 			distance = distance / numberOfCalculations;
 		
 		return distance;
+	}
+	
+	public Map<String, Building> cloneFacilities()
+	{
+		Map<String, Building> clone = new HashMap<String,Building>();
+		for(Map.Entry<String, Building> entry: facilities.entrySet())
+		{
+			Building building = entry.getValue();
+			clone.put(building.id, new Building(building.id,building.height,building.width));
+		}
+		
+		return clone;
+		
 	}
 }
 	
