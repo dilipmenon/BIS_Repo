@@ -14,6 +14,7 @@ public class PopulationFacilityLayout extends Population {
 	
 	private List<FacilityRelation> facilityRelations;
 	private ConstructionSite site;
+	
 
 	public PopulationFacilityLayout(int numberOfIndividuals, int numberOfGenerations,ConstructionSite site, List<FacilityRelation> facilityRelations) {
 		

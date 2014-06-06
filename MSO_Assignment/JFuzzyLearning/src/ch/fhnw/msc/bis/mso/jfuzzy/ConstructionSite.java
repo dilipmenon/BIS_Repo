@@ -202,10 +202,10 @@ public class ConstructionSite   {
 	private String retrieveBuildingIdOfGivenBlock(BuildingBlock myBlock) {
 		for (Building building : getAllBuildings()) {
 			if (building.occupiedBlocks.contains(myBlock)) {
-				return building.id;
+				return " " + building.id + " ";
 			}
 		}
-		return "+";
+		return " ~ ";
 	}
 
 	public void printCurrentLayout() {

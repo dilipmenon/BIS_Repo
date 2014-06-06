@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import GA.Population;
 import net.sourceforge.jFuzzyLogic.FIS;
 import net.sourceforge.jFuzzyLogic.FunctionBlock;
 import net.sourceforge.jFuzzyLogic.plot.JFuzzyChart;
@@ -67,31 +66,13 @@ public class FacilityLayoutTester {
 	private static void runGA() {
 		// *** CHANGE THE PARAMETERS OF THE GA *********************************************************************************************************
 				
-				final int NUMBEROFINDIVIDUALS = 200;  // Number of individuals in a generation; must be >=1
+				final int NUMBEROFINDIVIDUALS = 2000;  // Number of individuals in a generation; must be >=1
 				final int NUMBEROFGENERATIONS = 100; // Maximum number of generations; must be >=1
 				
-				final int SELECTIONSCHEME = 3;  // Selection scheme to be applied {0,1,2,3}
-				// 0: Selecting randomly individuals
-				// 1: Selecting best of two randomly chosen individuals
-				// 2: Selecting individuals if their ranking is smaller as a random number. 
-				//    If not take randomly another individual.
-				// 3: Selecting individuals if their ranking is smaller as a random number
-				//    If not, start again selecting individuals if their ranking is smaller as a random number. 
-				//    If not, take best individual. 
 				
-				final double CROSSOVERPROBABILITY = 0.5; // Probability of crossover [0.0,1.0]
-				final int    CROSSOVERSCHEME = 1;        // Crossover scheme to be applied {0,1,2,3,4,5}
-				// 0: Crossover (simple) individuals randomly
-				// 1: Crossover (double) individuals randomly
-				// 2: Crossover (simple) two given individuals
-				// 3: Crossover (double) two given individuals
-				// 4: Crossover (single) the first and the last individual, the second and the second last individual...
-				// 5: Crossover (double) the first and the last individual, the second and the second last individual ...
+					
+				final double MUTATIONPROBABILITY = 0.5; // Probability of mutation [0.0,1.0]
 				
-				final double MUTATIONPROBABILITY = 0.1; // Probability of mutation [0.0,1.0]
-				final int    MUTATIONSCHEME = 0;        // Mutation scheme to be applied {0,1}
-				// 0: Mutate one position in chromosome of individual
-				// 1: Mutate one gene in chromosome of individual 
 
 				// Verbose level from 0 (no output), 1 (few output), 2 (more output) to 3 (full output)
 				verboseLevel = 3;
@@ -126,7 +107,7 @@ public class FacilityLayoutTester {
 					population.createGivenNewGeneration(countGeneration);
 					population.initializeGivenEmptyGeneration(countGeneration);
 					population.cloneGeneration(countGeneration-1, countGeneration);
-					population.replaceWorstIndividualInGivenGeneration(countGeneration, 0.2);
+					population.replaceWorstIndividualInGivenGeneration(countGeneration, MUTATIONPROBABILITY);
 					
 					// Finally sort and rank individuals of population of new generation
 					if (verboseLevel > 0) System.out.println("--> Sort and rank generation " + countGeneration);
