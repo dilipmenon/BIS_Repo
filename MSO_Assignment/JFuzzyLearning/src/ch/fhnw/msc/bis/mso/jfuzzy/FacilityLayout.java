@@ -6,6 +6,7 @@ import java.util.Map;
 
 import GA.Individual;
 
+@SuppressWarnings("unused")
 public class FacilityLayout extends Individual {
 	// final static int DECIMAL_CODE = 10;
 	final static int GENE_LENGTH_ONE = 1;
@@ -13,6 +14,7 @@ public class FacilityLayout extends Individual {
 	private static int THRESHOLD_COUNTER = 100;
 	private boolean valid = true;
 	List<FacilityRelation> facilityRelations = new ArrayList<FacilityRelation>();
+	
 
 	public FacilityLayout(ConstructionSite site, List<FacilityRelation> facilityRelations, int numberOfGenes, int valueSystem) {
 		

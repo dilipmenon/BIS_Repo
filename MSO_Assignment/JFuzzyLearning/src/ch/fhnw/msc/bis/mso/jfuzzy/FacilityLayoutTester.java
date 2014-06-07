@@ -26,57 +26,45 @@ public class FacilityLayoutTester {
 	public static void main(String[] args)
 	{
 		
-		
 		System.out.println("***Welcome!***");
 		System.out.println();
 		System.out.println("***Step 1: Calculate Closeness Relations by using JFuzzy Logic***");
 		System.out.println();
+		
 		evaluateClosenessByFuzyyLogic();
+		
 		System.out.println();
 		
 		System.out.println("***Step 2: Initializing Site, construction building and facilities.***");
+		
 		initializeSite(); 
 		
-		//Place Facilities on Site Randomly
 		System.out.println();
 		System.out.println("***Step 3: Placing randomly the facilities on Site by using Brute Force***");
-		placeFacilitiesByBruteForce();
 		
-	
+		placeFacilitiesByBruteForce();
+			
 		System.out.println();
 		mySite.printCurrentLayout();
 		
 		System.out.println();
 		System.out.println("***Step 4: Applying Genetic Algorithm to calculate optimal Solution***");
 		runGA();
-		
-		
-		
-		
-		
 		System.out.println();
 		System.out.println("***Exiting application.***");	
 		System.out.println("***Have a nice day.***");
-		
-	}
+			}
 
-	/*
-	 * _Dfaf
-	 */
 	private static void runGA() {
 		// *** CHANGE THE PARAMETERS OF THE GA *********************************************************************************************************
 				
 				final int NUMBEROFINDIVIDUALS = 2000;  // Number of individuals in a generation; must be >=1
 				final int NUMBEROFGENERATIONS = 100; // Maximum number of generations; must be >=1
 				
-				
-					
-				final double MUTATIONPROBABILITY = 0.5; // Probability of mutation [0.0,1.0]
-				
+				final double MUTATIONPROBABILITY = 0.5; // Probability of mutation [0.0,1.0] or crossover
 
 				// Verbose level from 0 (no output), 1 (few output), 2 (more output) to 3 (full output)
 				verboseLevel = 3;
-				
 				
 				// *** MAIN PROGRAM *****************************************************************************************************************************
 				// Initialize the population object
@@ -108,7 +96,7 @@ public class FacilityLayoutTester {
 					population.initializeGivenEmptyGeneration(countGeneration);
 					population.cloneGeneration(countGeneration-1, countGeneration);
 					population.replaceWorstIndividualInGivenGeneration(countGeneration, MUTATIONPROBABILITY);
-					
+					if (verboseLevel > 0) System.out.println("--> Number of infeasible solutions generated " + population.getNumberOfInfeasibleSolutions());
 					// Finally sort and rank individuals of population of new generation
 					if (verboseLevel > 0) System.out.println("--> Sort and rank generation " + countGeneration);
 					population.doSortAscendinglyGeneration(countGeneration);
@@ -118,9 +106,7 @@ public class FacilityLayoutTester {
 					// Print best individual of the population of initial generation
 					System.out.print("Generation = "+countGeneration+"  \t");
 					population.printBestIndividualInGivenGeneration(countGeneration);
-					
-					
-				}
+								}
 				
 		
 	}

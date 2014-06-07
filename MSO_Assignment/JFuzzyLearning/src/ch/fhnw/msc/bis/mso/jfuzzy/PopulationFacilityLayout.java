@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.crypto.dsig.keyinfo.KeyValue;
-
-import GA.Generation;
 import GA.Individual;
 import GA.Population;
 
@@ -14,6 +11,7 @@ public class PopulationFacilityLayout extends Population {
 	
 	private List<FacilityRelation> facilityRelations;
 	private ConstructionSite site;
+	private int numberOfInfeasibleSolutions = 0;
 	
 
 	public PopulationFacilityLayout(int numberOfIndividuals, int numberOfGenerations,ConstructionSite site, List<FacilityRelation> facilityRelations) {
@@ -67,7 +65,7 @@ public class PopulationFacilityLayout extends Population {
 		public void replaceWorstIndividualInGivenGeneration(int givenGeneration, double mutationProability)
 		{
 			boolean feasibleSolutionFound = false;
-			int counter = 0;
+			numberOfInfeasibleSolutions = 0;
 		//Step 1: Get worst individual in given Generation
 			int worstIndividualPos = ((GenerationFacilityLayout)generation[givenGeneration]).getWorstIndividualPosition();
 			int[] worstIndividualChromosom = generation[givenGeneration].getIndividual(worstIndividualPos).getChromosom();
@@ -75,7 +73,7 @@ public class PopulationFacilityLayout extends Population {
 		//Step 2: replace worst Individual by either Mutation or Selection
 			while(!feasibleSolutionFound)
 			{
-				counter++;
+				numberOfInfeasibleSolutions++;
 				if(Math.random() > mutationProability )
 				{
 					GenerationFacilityLayout currentGeneration = ((GenerationFacilityLayout)generation[givenGeneration]);
@@ -89,6 +87,8 @@ public class PopulationFacilityLayout extends Population {
 				
 				feasibleSolutionFound = ((FacilityLayout)generation[givenGeneration].getIndividual(worstIndividualPos)).checkValidity();
 			}
+			numberOfInfeasibleSolutions--;
+			
 			double newOffspringFitness = generation[givenGeneration].getIndividual(worstIndividualPos).computeFitnessValue();
 			//Keep current worst value individual if the new does not outperform the current worst solution
 			if((newOffspringFitness) > worstIndividualFitnessValue)
@@ -101,6 +101,12 @@ public class PopulationFacilityLayout extends Population {
 			
 		
 		}
+
+		public int getNumberOfInfeasibleSolutions() {
+			return numberOfInfeasibleSolutions;
+		}
+
+		
 		
 
 }

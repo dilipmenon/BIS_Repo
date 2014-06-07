@@ -2,6 +2,7 @@ package ch.fhnw.msc.bis.mso.jfuzzy;
 import java.awt.Point;
 
 
+@SuppressWarnings("serial")
 public class BuildingBlock extends Point {
 	
 	private int x;
